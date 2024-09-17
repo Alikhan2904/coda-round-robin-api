@@ -1,9 +1,9 @@
-import express from "express";
+import express from 'express';
 
 const app = express();
 app.use(express.json());
 
-app.post("/api", (req, res) => {
+app.post('/api', (req, res) => {
   res.status(200).json(req.body);
 });
 
