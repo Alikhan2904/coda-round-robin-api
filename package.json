@@ -1,10 +1,12 @@
 {
   "name": "coda-round-robin-api",
   "version": "1.0.0",
-  "main": "app-instance.js",
+  "main": "src/round-robin-api.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/round-robin-api.js",
+    "dev": "nodemon src/round-robin-api.js",
+    "start-instance": "node instance.js"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +15,14 @@
   "dependencies": {
     "axios": "^1.7.7",
     "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.25.4",
+    "@types/jest": "^29.5.13",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.30.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4"
   }
 }
