@@ -4,7 +4,6 @@ import { postToInstance } from '../../utils/httpClient.js';
 let currentIndex = 0;
 
 const instanceFailures = {};
-const failureThreshold = 3;
 
 export function resetCurrentIndex() {
   currentIndex = 0;
