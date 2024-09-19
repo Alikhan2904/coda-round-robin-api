@@ -6,12 +6,13 @@
   "scripts": {
     "start": "node src/roundRobinApi.js",
     "dev": "nodemon src/roundRobinApi.js",
-    "start-instances": "node instance.js 3001 & node instance.js 3002 & node instance.js 3003"
+    "start-instances": "node instance.js 3001 & node instance.js 3002 & node instance.js 3003",
+    "test": "jest"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ali Khan Mehboob",
   "license": "ISC",
-  "description": "",
+  "description": "Coding assignment for CodaPayments by Ali Khan Mehboob",
   "dependencies": {
     "axios": "^1.7.7",
     "express": "^4.21.0",
