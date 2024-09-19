@@ -1,9 +1,13 @@
 import { appInstances } from '../../config/config.js';
+import {
+  getFailureCount,
+  isCircuitTripped,
+  registerFailure,
+  registerSuccess
+} from '../../utils/circuit-breaker/circuitBreaker.js';
 import { postToInstance } from '../../utils/httpClient.js';
 
 let currentIndex = 0;
-
-const instanceFailures = {};
 
 export function resetCurrentIndex() {
   currentIndex = 0;
@@ -20,18 +24,28 @@ export const routeRequest = async payload => {
   while (attempts < appInstances.length) {
     const targetApp = getNextAppInstance();
 
+    if (isCircuitTripped(targetApp)) {
+      console.log(
+        `Instance at ${targetApp} is temporarily unavailable due to repeated failures.`
+      );
+      attempts++;
+      continue;
+    }
+
     try {
       const data = await postToInstance(targetApp, payload);
-      instanceFailures[targetApp] = 0;
+      registerSuccess(targetApp);
+      console.log(`Successful response from: ${targetApp}`);
 
-      console.log('Successful response from:', targetApp);
       return data;
     } catch (error) {
-      console.log(
-        `Instance at ${targetApp} is slow or down. Failure count: ${instanceFailures[targetApp]}`
-      );
-      instanceFailures[targetApp] = (instanceFailures[targetApp] || 0) + 1;
+      registerFailure(targetApp);
       attempts++;
+      console.log(
+        `Instance at ${targetApp} is down or unresponsive. Failure count is ${getFailureCount(
+          targetApp
+        )}`
+      );
     }
   }
   throw new Error('All instances are down or unresponsive');
