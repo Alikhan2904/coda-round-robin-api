@@ -1,12 +1,12 @@
 {
   "name": "coda-round-robin-api",
   "version": "1.0.0",
-  "main": "src/round-robin-api.js",
+  "main": "src/roundRobinApi.js",
   "type": "module",
   "scripts": {
-    "start": "node src/round-robin-api.js",
-    "dev": "nodemon src/round-robin-api.js",
-    "start-instance": "node instance.js"
+    "start": "node src/roundRobinApi.js",
+    "dev": "nodemon src/roundRobinApi.js",
+    "start-instances": "node instance.js 3001 & node instance.js 3002 & node instance.js 3003"
   },
   "keywords": [],
   "author": "",
