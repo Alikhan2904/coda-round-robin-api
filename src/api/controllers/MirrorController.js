@@ -6,7 +6,7 @@ export const post = async (req, res) => {
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({
-      error: 'All application instances are unavailable or timed out'
+      error: 'All application instances are unavailable or timed out.'
     });
   }
 };
