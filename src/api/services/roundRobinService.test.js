@@ -4,10 +4,10 @@ import {
   registerFailure,
   registerSuccess
 } from '../../utils/circuit-breaker/circuitBreaker.js';
-import { postToInstance } from '../../utils/httpClient.js';
+import { postToInstance } from '../../utils/http-client/httpClient.js';
 import { resetCurrentIndex, routeRequest } from './roundRobinService.js';
 
-jest.mock('../../utils/httpClient.js');
+jest.mock('../../utils/http-client/httpClient.js');
 jest.mock('../../utils/circuit-breaker/circuitBreaker.js');
 
 describe('roundRobinService', () => {

@@ -5,7 +5,7 @@ import {
   registerFailure,
   registerSuccess
 } from '../../utils/circuit-breaker/circuitBreaker.js';
-import { postToInstance } from '../../utils/httpClient.js';
+import { postToInstance } from '../../utils/http-client/httpClient.js';
 
 let currentIndex = 0;
 

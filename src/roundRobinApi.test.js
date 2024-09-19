@@ -46,6 +46,9 @@ describe('Round Robin API', () => {
     const res = await request(app).post('/api/mirror').send(mockData);
 
     expect(res.status).toBe(500);
-    expect(res.body).toHaveProperty('error', 'All application instances are unavailable or timed out');
+    expect(res.body).toHaveProperty(
+      'error',
+      'All application instances are unavailable or timed out.'
+    );
   });
 });
