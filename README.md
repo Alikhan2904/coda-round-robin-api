@@ -53,7 +53,9 @@ The service is built using **Node.js** and **Express**, and it features **Axios*
     /circuit-breaker   
       - circuitBreaker.js
       - circuitBreaker.test.js
-    - httpClient.js    
+    /http-client   
+      - httpClient.js
+      - httpClient.test.js
   - roundRobinApi.js   
   - roundRobinApi.test.js
 - instance.js        
@@ -85,15 +87,15 @@ The service is built using **Node.js** and **Express**, and it features **Axios*
 1. Run the backend application instances on different ports:
 
     ```bash
+    npm run start-instances
+    ```
+    OR
+    ```bash
     node instance.js 3001
     node instance.js 3002
     node instance.js 3003
     ```
-    OR
-    ```bash
-    npm run start-instances
-    ```
-    
+
 2. Run the **Round Robin API**:
 
     ```bash
