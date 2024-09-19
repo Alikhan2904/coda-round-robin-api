@@ -36,7 +36,6 @@ export const routeRequest = async payload => {
       const data = await postToInstance(targetApp, payload);
       registerSuccess(targetApp);
       console.log(`Successful response from: ${targetApp}`);
-
       return data;
     } catch (error) {
       registerFailure(targetApp);
@@ -48,5 +47,5 @@ export const routeRequest = async payload => {
       );
     }
   }
-  throw new Error('All instances are down or unresponsive');
+  throw new Error('All instances are down or unresponsive.');
 };

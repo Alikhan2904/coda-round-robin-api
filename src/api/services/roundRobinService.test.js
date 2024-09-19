@@ -11,6 +11,7 @@ jest.mock('../../utils/httpClient.js');
 jest.mock('../../utils/circuit-breaker/circuitBreaker.js');
 
 describe('roundRobinService', () => {
+  const payload = { game: 'Mobile Legends' };
   const mockAPIs = [
     'http://localhost:3001/api',
     'http://localhost:3002/api',
@@ -23,38 +24,32 @@ describe('roundRobinService', () => {
   });
 
   it('should send the request to the first available API', async () => {
-    postToInstance.mockResolvedValue({ success: true });
+    postToInstance.mockResolvedValue(payload);
     isCircuitTripped.mockReturnValueOnce(false);
 
-    const result = await routeRequest({ game: 'Mobile Legends' });
+    const result = await routeRequest(payload);
 
     expect(registerSuccess).toHaveBeenCalled();
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], {
-      game: 'Mobile Legends'
-    });
-    expect(result).toEqual({ success: true });
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], payload);
+    expect(result).toEqual(payload);
   });
 
   it('should retry and send the request to the next API if the first one fails', async () => {
     postToInstance
       .mockRejectedValueOnce(new Error('First API failed'))
-      .mockResolvedValueOnce({ success: true });
+      .mockResolvedValueOnce(payload);
     getFailureCount.mockReturnValueOnce(1);
     isCircuitTripped.mockReturnValue(false);
 
-    const result = await routeRequest({ game: 'Mobile Legends' });
+    const result = await routeRequest(payload);
 
     expect(registerFailure).toHaveBeenCalledWith(mockAPIs[0]);
     expect(registerSuccess).toHaveBeenCalledWith(mockAPIs[1]);
 
     expect(postToInstance).toHaveBeenCalledTimes(2);
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], {
-      game: 'Mobile Legends'
-    });
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], {
-      game: 'Mobile Legends'
-    });
-    expect(result).toEqual({ success: true });
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], payload);
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], payload);
+    expect(result).toEqual(payload);
   });
 
   it('should handle timeouts and retry the request on the next available API', async () => {
@@ -64,22 +59,18 @@ describe('roundRobinService', () => {
     };
 
     postToInstance.mockRejectedValueOnce(timeoutError);
-    postToInstance.mockResolvedValueOnce({ success: true });
+    postToInstance.mockResolvedValueOnce(payload);
     getFailureCount.mockReturnValueOnce(1);
 
-    const result = await routeRequest({ game: 'Mobile Legends' });
+    const result = await routeRequest(payload);
 
     expect(registerFailure).toHaveBeenCalledWith(mockAPIs[0]);
     expect(registerSuccess).toHaveBeenCalledWith(mockAPIs[1]);
 
     expect(postToInstance).toHaveBeenCalledTimes(2);
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], {
-      game: 'Mobile Legends'
-    });
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], {
-      game: 'Mobile Legends'
-    });
-    expect(result).toEqual({ success: true });
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], payload);
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], payload);
+    expect(result).toEqual(payload);
   });
 
   it('should try the next instance if the circuit is tripped for an instance', async () => {
@@ -87,22 +78,18 @@ describe('roundRobinService', () => {
 
     postToInstance
       .mockRejectedValueOnce(new Error('First API failed'))
-      .mockResolvedValueOnce({ success: true });
+      .mockResolvedValueOnce(payload);
     getFailureCount.mockReturnValueOnce(3);
 
-    const result = await routeRequest({ game: 'Mobile Legends' });
+    const result = await routeRequest(payload);
 
     expect(registerFailure).toHaveBeenCalledWith(mockAPIs[1]);
     expect(registerSuccess).toHaveBeenCalledWith(mockAPIs[2]);
 
     expect(postToInstance).toHaveBeenCalledTimes(2);
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], {
-      game: 'Mobile Legends'
-    });
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[2], {
-      game: 'Mobile Legends'
-    });
-    expect(result).toEqual({ success: true });
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], payload);
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[2], payload);
+    expect(result).toEqual(payload);
   });
 
   it('should fail after all APIs timeout', async () => {
@@ -117,19 +104,13 @@ describe('roundRobinService', () => {
       .mockReturnValueOnce(2)
       .mockReturnValueOnce(3);
 
-    await expect(routeRequest({ game: 'Mobile Legends' })).rejects.toThrow(
-      'All instances are down or unresponsive'
+    await expect(routeRequest(payload)).rejects.toThrow(
+      'All instances are down or unresponsive.'
     );
 
     expect(postToInstance).toHaveBeenCalledTimes(3);
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], {
-      game: 'Mobile Legends'
-    });
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], {
-      game: 'Mobile Legends'
-    });
-    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[2], {
-      game: 'Mobile Legends'
-    });
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[0], payload);
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[1], payload);
+    expect(postToInstance).toHaveBeenCalledWith(mockAPIs[2], payload);
   });
 });
