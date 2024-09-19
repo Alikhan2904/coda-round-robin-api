@@ -1,6 +1,10 @@
-export const instanceFailures = new Map();
+const instanceFailures = new Map();
 const failureThreshold = 3;
 const resetTimeout = 30000;
+
+export const getFailureCount = instance => {
+  return instanceFailures.get(instance);
+};
 
 export const isCircuitTripped = instance => {
   return instanceFailures.get(instance) >= failureThreshold;

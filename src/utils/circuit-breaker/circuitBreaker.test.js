@@ -1,13 +1,11 @@
 import {
   isCircuitTripped,
   registerFailure,
-  registerSuccess,
-  instanceFailures
+  registerSuccess
 } from './circuitBreaker';
 
 describe('Circuit Breaker', () => {
   beforeEach(() => {
-    instanceFailures.clear();
     jest.clearAllTimers();
   });
 
