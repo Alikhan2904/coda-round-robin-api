@@ -39,6 +39,7 @@ The service is built using **Node.js** and **Express**, and it features **Axios*
   /api                 
     /controllers       
       - MirrorController.js
+      - MirrorController.test.js
     /middlewares       
       - validateJson.js
       - validateJson.test.js
